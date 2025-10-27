@@ -49,7 +49,7 @@ export default function TemplateForm() {
         <div className="flex gap-2 mt-2">
           <button
             onClick={() => addField()}
-            className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700"
+            className="bg-accent text-white px-4 py-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
           >
             Feld hinzufügen
           </button>
