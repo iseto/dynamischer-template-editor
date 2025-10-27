@@ -8,8 +8,14 @@ export default function TemplateForm() {
 
   return (
     <div className="contents">
-      <section className="bg-white rounded-xl shadow-sm p-5">
-        <h2 className="text-xl font-semibold">Eingabefelder</h2>
+      <section
+        aria-labelledby="form-heading"
+        role="form"
+        className="bg-white rounded-xl shadow-sm p-5"
+      >
+        <h2 id="form-heading" className="text-xl font-semibold">
+          Eingabefelder
+        </h2>
         <p className="text-sm text-muted mt-1 mb-4">
           Felder bearbeiten, um Änderungen im Live Preview-Bereich zu sehen.
         </p>
@@ -66,8 +72,15 @@ export default function TemplateForm() {
         </div>
       </section>
 
-      <aside className="bg-white rounded-xl shadow-sm p-5">
-        <h2 className="text-xl font-semibold mb-2">Live Preview</h2>
+      <aside
+        role="region"
+        aria-labelledby="preview-heading"
+        aria-live="polite"
+        className="bg-white rounded-xl shadow-sm p-5"
+      >
+        <h2 id="preview-heading" className="text-xl font-semibold mb-2">
+          Live Preview
+        </h2>
         <Preview fields={fields} />
       </aside>
     </div>
