@@ -1,4 +1,4 @@
-# Dynamic Template Editor (Demo)
+# Dynamischer Template-Editor (Beispielprojekt)
 
 Kleines Demo-Projekt: Ein dynamischer Template-Editor mit React, TypeScript und Vite.
 

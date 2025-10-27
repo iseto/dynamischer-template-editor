@@ -3,7 +3,8 @@ import useTemplate from "../hooks/useTemplate";
 import Preview from "./Preview";
 
 export default function TemplateForm() {
-  const { fields, updateField, addField, removeField } = useTemplate();
+  const { fields, updateField, addField, removeField, clearAll } =
+    useTemplate();
 
   return (
     <div style={{ display: "contents" }}>
@@ -42,6 +43,12 @@ export default function TemplateForm() {
 
         <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
           <button onClick={() => addField()}>Feld hinzufügen</button>
+        </div>
+        <br />
+        <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+          <button type="button" onClick={clearAll}>
+            Alles zurücksetzen
+          </button>
         </div>
       </section>
 
