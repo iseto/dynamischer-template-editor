@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #f7fafc;
+  --card: #ffffff;
+  --accent: #2563eb;
+  --muted: #6b7280;
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .text-muted {
+    color: var(--muted);
+  }
+
+  .bg-accent {
+    background-color: var(--accent);
+  }
+
+  .ring-accent {
+    --tw-ring-color: var(--accent);
+  }
+
+  .bg-card {
+    background-color: var(--card);
+  }
+
+  .bg-page {
+    background-color: var(--bg);
+  }
+}
+
+body {
+  @apply bg-page text-slate-900 font-sans p-5;
+}
+
+.app {
+  @apply max-w-5xl mx-auto;
+}
+
+header {
+  h1 {
+    @apply text-2xl font-semibold;
+  }
+
+  p {
+    @apply text-muted mt-1 mb-4;
+  }
+}
+
+main {
+  @apply grid gap-4 grid-cols-1 md:grid-cols-2;
+}
+
+.card {
+  @apply bg-card rounded-xl shadow-sm p-5;
+}
+
+.field {
+  @apply flex flex-col mb-3;
+
+  label {
+    @apply text-sm text-muted mb-1;
+  }
+
+  input,
+  textarea,
+  select {
+    @apply border border-slate-200 rounded-md p-2 text-base focus:ring-2 ring-accent focus:outline-none;
+  }
+}
+
+.preview {
+  @apply whitespace-pre-wrap font-mono bg-slate-900 text-slate-100 p-3 rounded-lg min-h-[120px];
+}
+
+.small {
+  @apply text-sm text-muted;
+}
