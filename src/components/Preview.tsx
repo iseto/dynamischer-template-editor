@@ -8,7 +8,7 @@ export default function Preview({ fields }: { fields: TemplateField[] }) {
         {lines.join("\n")}
       </div>
       <p className="small" style={{ marginTop: 8 }}>
-        Live preview of the generated document content.
+        Live-Vorschau des generierten Dokumentinhalts.
       </p>
     </div>
   );
