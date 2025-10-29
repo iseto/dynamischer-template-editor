@@ -7,11 +7,13 @@ export default function TemplateForm() {
     useTemplate();
 
   const neuesLabelRef = useRef<HTMLInputElement | null>(null);
+  const prevLength = useRef(fields.length);
 
   useEffect(() => {
-    if (neuesLabelRef.current) {
+    if (fields.length > prevLength.current && neuesLabelRef.current) {
       neuesLabelRef.current.focus();
     }
+    prevLength.current = fields.length;
   }, [fields.length]);
 
   return (
