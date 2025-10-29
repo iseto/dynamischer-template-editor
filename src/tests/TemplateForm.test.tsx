@@ -1,88 +1,147 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import TemplateForm from "../components/TemplateForm";
-// import useTemplate from "../hooks/useTemplate";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
+import TemplateForm from "../components/TemplateForm";
+import * as useTemplateHook from "../hooks/useTemplate";
 import { vi } from "vitest";
 
-// Mock useTemplate
-vi.mock("../hooks/useTemplate", () => {
-  return {
-    default: () => ({
-      fields: [
-        { id: "name", label: "Name", value: "", type: "text" },
-        { id: "bio", label: "Bio", value: "", type: "textarea" },
-      ],
-      updateField: vi.fn(),
-      addField: vi.fn(),
-      removeField: vi.fn(),
-      clearAll: vi.fn(),
-    }),
-  };
-});
+vi.mock("../hooks/useTemplate");
+const flushPromises = () => new Promise((resolve) => setTimeout(resolve, 0));
 
-describe("TemplateForm", () => {
-  it("renders form and preview sections", () => {
+describe("TemplateForm-Komponente", () => {
+  const mockUpdateField = vi.fn();
+  const mockUpdateLabel = vi.fn();
+  const mockAddField = vi.fn();
+  const mockRemoveField = vi.fn();
+  const mockClearAll = vi.fn();
+
+  const mockFields = [
+    { id: "1", label: "Name", value: "Max", type: "text" },
+    { id: "2", label: "Adresse", value: "Musterstraße", type: "textarea" },
+  ];
+
+  beforeEach(() => {
+    vi.spyOn(useTemplateHook, "default").mockReturnValue({
+      fields: mockFields,
+      updateField: mockUpdateField,
+      updateLabel: mockUpdateLabel,
+      addField: mockAddField,
+      removeField: mockRemoveField,
+      clearAll: mockClearAll,
+    });
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("rendert alle Formularfelder und Vorschau", () => {
     render(<TemplateForm />);
-    expect(screen.getByRole("form")).toBeInTheDocument();
+
     expect(
-      screen.getByRole("region", { name: /live preview/i })
+      screen.getByRole("heading", { name: /Eingabefelder/i })
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: /Live Preview/i })
+    ).toBeInTheDocument();
+
+    const inputs = screen.getAllByRole("textbox");
+    expect(inputs).toHaveLength(4);
+    expect(screen.getByDisplayValue("Max")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("Musterstraße")).toBeInTheDocument();
   });
 
-  // const mockedUseTemplate = vi.mocked(useTemplate);
-
-  it("renders input and textarea fields", () => {
+  it("aktualisiert das Label beim Eingeben von Text in das Label-Eingabefeld", async () => {
     render(<TemplateForm />);
-    expect(screen.getByLabelText("Name")).toBeInTheDocument();
-    expect(screen.getByLabelText("Bio")).toBeInTheDocument();
+    const nameInput = screen.getByDisplayValue("Name");
+
+    await act(async () => {
+      fireEvent.change(nameInput, { target: { value: "Vorname" } });
+      await flushPromises();
+    });
+
+    expect(mockUpdateLabel).toHaveBeenCalledWith("1", "Vorname");
   });
 
-  // it("calls updateField when input changes", () => {
-  //   // const { default: useTemplate } = require("../hooks/useTemplate");
-  //   // const updateField = useTemplate().updateField;
+  it("aktualisiert den Feldwert bei der Eingabe in das Eingabefeld.", async () => {
+    render(<TemplateForm />);
+    const fieldInputs = screen.getAllByRole("textbox");
 
-  //   render(<TemplateForm />);
-  //   const nameInput = screen.getByLabelText("Name");
-  //   fireEvent.change(nameInput, { target: { value: "Iggy" } });
+    await act(async () => {
+      fireEvent.change(fieldInputs[1], { target: { value: "Erika" } });
+      await flushPromises();
+    });
 
-  //   expect(mockedUseTemplate().updateField).toHaveBeenCalledWith(
-  //     "name",
-  //     "Iggy"
-  //   );
-  // });
+    expect(mockUpdateField).toHaveBeenCalledWith("1", "Erika");
+  });
 
-  // it("calls removeField when remove button is clicked", () => {
-  //   // const { default: useTemplate } = require("../hooks/useTemplate");
-  //   // const removeField = useTemplate().removeField;
+  it("fügt ein neues Feld hinzu, wenn „Feld hinzufügen” angeklickt wird", async () => {
+    render(<TemplateForm />);
+    const addButton = screen.getByRole("button", { name: /Feld hinzufügen/i });
 
-  //   render(<TemplateForm />);
-  //   const removeButton = screen.getByRole("button", {
-  //     name: /entferne name feld/i,
-  //   });
-  //   fireEvent.click(removeButton);
+    await act(async () => {
+      fireEvent.click(addButton);
+    });
 
-  //   expect(mockedUseTemplate().updateField).toHaveBeenCalledWith("name");
-  // });
+    expect(mockAddField).toHaveBeenCalledTimes(1);
+  });
 
-  // it("calls addField when add button is clicked", () => {
-  //   // const { default: useTemplate } = require("../hooks/useTemplate");
-  //   // const addField = useTemplate().addField;
+  it("zeigt einen Bestätigungsdialog an und löscht die Felder nach der Bestätigung.", async () => {
+    render(<TemplateForm />);
 
-  //   render(<TemplateForm />);
-  //   const addButton = screen.getByText("Feld hinzufügen");
-  //   fireEvent.click(addButton);
+    const resetButton = screen.getByRole("button", {
+      name: /Alles zurücksetzen/i,
+    });
 
-  //   expect(mockedUseTemplate().updateField).toHaveBeenCalled();
-  // });
+    await act(async () => {
+      fireEvent.click(resetButton);
+    });
 
-  // it("calls clearAll when reset button is clicked", () => {
-  //   // const { default: useTemplate } = require("../hooks/useTemplate");
-  //   // const clearAll = useTemplate().clearAll;
+    expect(window.confirm).toHaveBeenCalledWith(
+      expect.stringMatching(/wirklich alle Felder/i)
+    );
+    expect(mockClearAll).toHaveBeenCalled();
+  });
 
-  //   render(<TemplateForm />);
-  //   const resetButton = screen.getByText("Alles zurücksetzen");
-  //   fireEvent.click(resetButton);
+  it("löscht Felder nicht, wenn der Benutzer die Bestätigung abbricht", async () => {
+    (window.confirm as jest.Mock).mockReturnValueOnce(false);
+    render(<TemplateForm />);
+    const resetButton = screen.getByRole("button", {
+      name: /Alles zurücksetzen/i,
+    });
 
-  //   expect(mockedUseTemplate().updateField).toHaveBeenCalled();
-  // });
+    await act(async () => {
+      fireEvent.click(resetButton);
+    });
+
+    expect(mockClearAll).toHaveBeenCalled();
+  });
+
+  it("fokussiert die neueste Feldeingabe, wenn ein neues Feld hinzugefügt wird.", async () => {
+    const fields = [
+      ...mockFields,
+      { id: "3", label: "Neu", value: "", type: "text" },
+    ];
+    let rerender: any;
+
+    const { rerender: rer } = render(<TemplateForm />);
+    rerender = rer;
+
+    (useTemplateHook.default as any).mockReturnValue({
+      fields,
+      updateField: mockUpdateField,
+      updateLabel: mockUpdateLabel,
+      addField: mockAddField,
+      removeField: mockRemoveField,
+      clearAll: mockClearAll,
+    });
+
+    await act(async () => {
+      rerender(<TemplateForm />);
+      await flushPromises();
+    });
+
+    const newestInput = screen.getByDisplayValue("Neu");
+    expect(document.activeElement).toBe(newestInput);
+  });
 });

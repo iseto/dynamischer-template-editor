@@ -32,17 +32,15 @@ export default function TemplateForm() {
 
         {fields.map((field, index) => (
           <div className="flex flex-col mb-3" key={field.id}>
-            {/* <label htmlFor={field.id} className="text-sm text-muted mb-1">
-              {field.label}
-            </label> */}
             <input
               ref={index === fields.length - 1 ? neuesLabelRef : null}
               type="text"
               value={field.label}
+              test-id={field.label}
               onChange={(e) => updateLabel(field.id, e.target.value)}
               placeholder="Feldbezeichnung eingeben"
               aria-label={`Label für Feld ${index + 1}`}
-              className="border border-slate-300 rounded-md p-2 mb-1 text-sm focus:ring-2 focus:ring-accent"
+              className="border border-slate-300 rounded-md p-2 mb-1 focus:ring-2 focus:ring-accent"
             />
             {field.type === "textarea" ? (
               <textarea
@@ -56,14 +54,14 @@ export default function TemplateForm() {
                 id={field.id}
                 value={field.value}
                 onChange={(e) => updateField(field.id, e.target.value)}
-                className="border border-slate-200 rounded-md p-2 text-base focus:ring-2 focus:ring-[var(--accent)] focus:outline-none"
+                className="border border-slate-300 rounded-md p-2 text-base focus:ring-2 focus:ring-[var(--accent)] focus:outline-none"
               />
             )}
             <div className="flex gap-2 mt-1.5">
               <button
                 onClick={() => removeField(field.id)}
                 aria-label={`Entferne Feld ${field.label || field.id}`}
-                className="bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300"
+                className="bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
               >
                 Feld entfernen
               </button>
@@ -89,7 +87,7 @@ export default function TemplateForm() {
               );
               if (confirmed) clearAll();
             }}
-            className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 px-3 py-2 rounded-md text-sm focus-visible:ring-2 focus-visible:ring-red-500"
+            className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 px-3 py-2 rounded-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
           >
             Alles zurücksetzen
           </button>
