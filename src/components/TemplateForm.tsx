@@ -36,7 +36,7 @@ export default function TemplateForm() {
               ref={index === fields.length - 1 ? neuesLabelRef : null}
               type="text"
               value={field.label}
-              test-id={field.label}
+              data-testid={`field-label-${field.id}`}
               onChange={(e) => updateLabel(field.id, e.target.value)}
               placeholder="Feldbezeichnung eingeben"
               aria-label={`Label für Feld ${index + 1}`}
@@ -47,6 +47,8 @@ export default function TemplateForm() {
                 id={field.id}
                 value={field.value}
                 onChange={(e) => updateField(field.id, e.target.value)}
+                aria-label={field.label}
+                data-testid={`field-value-${field.id}`}
                 className="border border-slate-200 rounded-md p-2 text-base focus:ring-2 focus:ring-[var(--accent)] focus:outline-none"
               />
             ) : (
@@ -54,6 +56,8 @@ export default function TemplateForm() {
                 id={field.id}
                 value={field.value}
                 onChange={(e) => updateField(field.id, e.target.value)}
+                aria-label={field.label}
+                data-testid={`field-value-${field.id}`}
                 className="border border-slate-300 rounded-md p-2 text-base focus:ring-2 focus:ring-[var(--accent)] focus:outline-none"
               />
             )}
@@ -72,6 +76,7 @@ export default function TemplateForm() {
         <div className="flex gap-2 mt-2">
           <button
             onClick={() => addField()}
+            data-testd="add-field"
             className="bg-accent text-white px-4 py-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
           >
             Feld hinzufügen
@@ -87,6 +92,7 @@ export default function TemplateForm() {
               );
               if (confirmed) clearAll();
             }}
+            data-testid="reset-all"
             className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 px-3 py-2 rounded-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-red-500"
           >
             Alles zurücksetzen
