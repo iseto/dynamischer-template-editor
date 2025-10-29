@@ -1,10 +1,18 @@
-import React from "react";
+import { useEffect, useRef } from "react";
 import useTemplate from "../hooks/useTemplate";
 import Preview from "./Preview";
 
 export default function TemplateForm() {
-  const { fields, updateField, addField, removeField, clearAll } =
+  const { fields, updateField, updateLabel, addField, removeField, clearAll } =
     useTemplate();
+
+  const neuesLabelRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (neuesLabelRef.current) {
+      neuesLabelRef.current.focus();
+    }
+  }, [fields.length]);
 
   return (
     <div className="contents">
@@ -20,11 +28,20 @@ export default function TemplateForm() {
           Felder bearbeiten, um Änderungen im Live Preview-Bereich zu sehen.
         </p>
 
-        {fields.map((field) => (
+        {fields.map((field, index) => (
           <div className="flex flex-col mb-3" key={field.id}>
-            <label htmlFor={field.id} className="text-sm text-muted mb-1">
+            {/* <label htmlFor={field.id} className="text-sm text-muted mb-1">
               {field.label}
-            </label>
+            </label> */}
+            <input
+              ref={index === fields.length - 1 ? neuesLabelRef : null}
+              type="text"
+              value={field.label}
+              onChange={(e) => updateLabel(field.id, e.target.value)}
+              placeholder="Feldbezeichnung eingeben"
+              aria-label={`Label für Feld ${index + 1}`}
+              className="border border-slate-300 rounded-md p-2 mb-1 text-sm focus:ring-2 focus:ring-accent"
+            />
             {field.type === "textarea" ? (
               <textarea
                 id={field.id}
@@ -43,7 +60,7 @@ export default function TemplateForm() {
             <div className="flex gap-2 mt-1.5">
               <button
                 onClick={() => removeField(field.id)}
-                aria-label={`Entferne ${field.id} Feld`}
+                aria-label={`Entferne Feld ${field.label || field.id}`}
                 className="bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300"
               >
                 Feld entfernen
@@ -64,8 +81,13 @@ export default function TemplateForm() {
         <div className="flex gap-2 mt-2">
           <button
             type="button"
-            onClick={clearAll}
-            className="bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300"
+            onClick={() => {
+              const confirmed = window.confirm(
+                "Möchten Sie wirklich alle Felder zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden."
+              );
+              if (confirmed) clearAll();
+            }}
+            className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 px-3 py-2 rounded-md text-sm focus-visible:ring-2 focus-visible:ring-red-500"
           >
             Alles zurücksetzen
           </button>
