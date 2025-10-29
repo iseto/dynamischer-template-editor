@@ -81,8 +81,13 @@ export default function TemplateForm() {
         <div className="flex gap-2 mt-2">
           <button
             type="button"
-            onClick={clearAll}
-            className="bg-gray-200 text-gray-800 px-3 py-1 rounded hover:bg-gray-300"
+            onClick={() => {
+              const confirmed = window.confirm(
+                "Möchten Sie wirklich alle Felder zurücksetzen? Diese Aktion kann nicht rückgängig gemacht werden."
+              );
+              if (confirmed) clearAll();
+            }}
+            className="bg-red-50 hover:bg-red-100 text-red-700 border border-red-300 px-3 py-2 rounded-md text-sm focus-visible:ring-2 focus-visible:ring-red-500"
           >
             Alles zurücksetzen
           </button>
