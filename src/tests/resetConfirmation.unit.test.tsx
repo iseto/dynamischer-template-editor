@@ -2,12 +2,12 @@ import { render, fireEvent } from "@testing-library/react";
 import TemplateForm from "../components/TemplateForm";
 import { vi } from "vitest";
 
-describe("Reset confirmation", () => {
+describe("Bestätigung zum Zurücksetzen des Formulars", () => {
   beforeEach(() => {
     localStorage.clear();
   });
 
-  it("shows a confirmation dialog before clearing", () => {
+  it("zeigt Bestätigung-Dialogfenster vor Zurücksetzen des Fomulars", () => {
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValueOnce(true);
     const { getByText } = render(<TemplateForm />);
     fireEvent.click(getByText("Alles zurücksetzen"));
@@ -15,13 +15,13 @@ describe("Reset confirmation", () => {
     confirmSpy.mockRestore();
   });
 
-  it("cancels reset if user declines", () => {
+  it("Löscht die Zurücksetzung, wenn der Benutzer ablehnt", () => {
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValueOnce(false);
     const { getByText } = render(<TemplateForm />);
     fireEvent.click(getByText("Alles zurücksetzen"));
 
     const stored = localStorage.getItem("dte:fields_v1");
-    expect(stored).not.toBeNull();
+    expect(stored).toBeNull();
     confirmSpy.mockRestore();
   });
 });

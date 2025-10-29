@@ -80,7 +80,6 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-/** Debounce helper ohne `any` */
 function useDebouncedCallback<T extends (...args: any[]) => void>(
   fn: T,
   delay = 300
