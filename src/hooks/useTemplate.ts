@@ -80,18 +80,18 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-function useDebouncedCallback<T extends (...args: any[]) => void>(
-  fn: T,
+function useDebouncedCallback<T>(
+  fn: (arg: T) => void,
   delay = 300
-): (...args: Parameters<T>) => void {
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+): (arg: T) => void {
+  const timer = useRef<ReturnType<typeof setTimeout>>();
   const cb = useRef(fn);
   cb.current = fn;
 
   return useCallback(
-    (...args: Parameters<T>) => {
+    (arg: T) => {
       if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(() => cb.current(...args), delay);
+      timer.current = setTimeout(() => cb.current(arg), delay);
     },
     [delay]
   );

@@ -86,7 +86,7 @@ describe("useTemplate hook", () => {
     expect(result.current.fields[0].id).toBe(reversed[0].id);
   });
 
-  it("Lädt Felder aus localStorage, falls vorhanden", () => {
+  it("lädt Felder aus localStorage, falls vorhanden", () => {
     const fake: TemplateField[] = [
       { id: "x", label: "X", value: "1", type: "text" },
     ];

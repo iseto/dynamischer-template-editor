@@ -15,7 +15,7 @@ describe("Bestätigung zum Zurücksetzen des Formulars", () => {
     confirmSpy.mockRestore();
   });
 
-  it("Löscht die Zurücksetzung, wenn der Benutzer ablehnt", () => {
+  it("löscht die Zurücksetzung, wenn der Benutzer ablehnt", () => {
     const confirmSpy = vi.spyOn(window, "confirm").mockReturnValueOnce(false);
     const { getByText } = render(<TemplateForm />);
     fireEvent.click(getByText("Alles zurücksetzen"));

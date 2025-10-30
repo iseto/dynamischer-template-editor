@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("Bearbeitbare Felder aktualisieren den Preview-Bereich", async ({
+test("bearbeitbare Felder aktualisieren den Preview-Bereich", async ({
   page,
 }) => {
   await page.goto("http://localhost:5173");
@@ -11,7 +11,7 @@ test("Bearbeitbare Felder aktualisieren den Preview-Bereich", async ({
   await expect(preview).toHaveText(/Name: Iggy/);
 });
 
-test("edit field updates preview and persists after reload", async ({
+test("zeigt Vorschau der Änderungen im Bearbeitungsfeld und deb Wert nach dem Neuladen beibehalten", async ({
   page,
 }) => {
   await page.goto("http://localhost:5173");
