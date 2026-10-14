@@ -1,20 +1,17 @@
 import { defineConfig } from "@playwright/test";
-
 export default defineConfig({
-  use: { baseURL: "http://127.0.0.1:5173" },
-  webServer: {
-    command: "npm run dev -- --host 127.0.0.1 --port 5173",
-    port: 5173,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-    testIgnore: ["src/tests/**/*.test.tsx"],
+  timeout: 60000,
+  testDir: "./src/tests/e2e",
+  use: {
+    baseURL: "http://127.0.0.1:5186",
+    screenshot: "only-on-failure",
   },
-  projects: [
-    {
-      name: "chromium",
-      use: { channel: "chrome" },
-      testDir: "src/tests",
-      testMatch: "**/*.spec.ts",
-    },
-  ],
+  webServer: {
+    command: process.env.E2E_PRODUCTION
+      ? "npm run preview -- --host 127.0.0.1 --port 5186 --strictPort"
+      : "npm run dev -- --host 127.0.0.1 --port 5186",
+    url: "http://127.0.0.1:5186",
+    reuseExistingServer: false,
+    timeout: 120_000,
+  },
 });

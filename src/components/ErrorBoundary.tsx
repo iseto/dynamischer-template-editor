@@ -17,8 +17,8 @@ export default class ErrorBoundary extends React.Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div role="alert" className="p-4 bg-red-50 text-red-700 rounded-md">
-          Etwas ist schiefgelaufen. Bitte Seite neu laden.
+        <div role="alert" className="error-card">
+          Something went wrong. Reload the page to reopen your saved drafts.
         </div>
       );
     }

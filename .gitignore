@@ -111,3 +111,7 @@ build/
 *.swo
 
 test-results
+
+# Generated self-hosted HugeRTE assets (prepared before dev/build)
+public/vendor/
+playwright-report/
