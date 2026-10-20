@@ -115,3 +115,6 @@ test-results
 # Generated self-hosted HugeRTE assets (prepared before dev/build)
 public/vendor/
 playwright-report/
+
+# Generated dependency audit reports and local notification baseline
+/reports/

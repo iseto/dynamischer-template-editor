@@ -60,3 +60,8 @@ HugeRTE and its React integration are MIT-licensed dependencies. The copied Huge
 ## Release assessment
 
 See [PRODUCTION_READINESS.md](PRODUCTION_READINESS.md) for the release verdict, production verification, deployment requirements, and known limits.
+
+## Automated dependency maintenance
+
+Weekly Dependabot updates and daily full dependency audits are configured.
+See [automation schedules and notification behavior](docs/AUTOMATIONS.md).
