@@ -75,6 +75,12 @@ for (const theme of ["light", "dark"])
         .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
         .analyze();
       expect(audit.violations).toEqual([]);
+      if (contrast === "more") {
+        const enhanced = await new AxeBuilder({ page })
+          .withRules(["color-contrast-enhanced"])
+          .analyze();
+        expect(enhanced.violations).toEqual([]);
+      }
       await page
         .getByRole("button", { name: "Insert/edit link", exact: true })
         .click();
