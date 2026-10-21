@@ -23,7 +23,11 @@ export function renderDocument(html: string, variables: Variable[]): string {
   return document.body.innerHTML;
 }
 
-export function exportDocument(title: string, html: string): string {
+export function exportDocument(
+  title: string,
+  html: string,
+  viewingStyles = "",
+): string {
   const safeTitle = title.replace(
     /[&<>"']/g,
     (character) =>
@@ -31,5 +35,24 @@ export function exportDocument(title: string, html: string): string {
         character
       ]!,
   );
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safeTitle}</title><style>${documentStyles}</style></head><body>${html}</body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safeTitle}</title><style>${documentStyles}${viewingStyles}</style></head><body>${html}</body></html>`;
+}
+
+// Viewing preferences are never written into a draft or the exported document.
+export function documentAppearanceStyles(
+  theme: string,
+  contrast: string,
+): string {
+  const dark = theme === "dark";
+  const more = contrast === "more";
+  const ink = dark
+    ? more
+      ? "#ffffff"
+      : "#e9f1e7"
+    : more
+      ? "#09150c"
+      : "#303b35";
+  const paper = dark ? "#132019" : "#ffffff";
+  const accent = dark ? "#c9edae" : "#254b35";
+  return `html{color-scheme:${dark ? "dark" : "light"}}body{background:${paper};color:${ink}}a{color:${accent}}small,p[style*="#71766e"],p[style*="#527263"]{color:${ink}!important}blockquote,th,pre{background:${dark ? "#24372b" : "#f2f5ef"};color:${ink}}hr,th,td,blockquote{border-color:${dark ? "#adc69a" : "#687e5c"}}${more ? `body *{color:${ink}!important;background-color:transparent!important;border-color:currentColor!important}a{text-decoration:underline}` : ""}@media(forced-colors:active){body{background:Canvas;color:CanvasText}body *{color:inherit!important;background-color:transparent!important;border-color:CanvasText!important}a{color:LinkText!important}::selection{background:Highlight;color:HighlightText}}`;
 }

@@ -1,9 +1,22 @@
 import { Editor } from "@hugerte/hugerte-react";
 import type { Editor as HugeEditor } from "hugerte";
-import type { MutableRefObject } from "react";
+import { useEffect, type MutableRefObject } from "react";
 import { documentStyles } from "../utils/document";
 
+function applyViewingStyles(editor: HugeEditor, styles: string) {
+  const doc = editor.getDoc();
+  if (!doc?.head) return;
+  let style = doc.getElementById("studio-appearance");
+  if (!style) {
+    style = doc.createElement("style");
+    style.id = "studio-appearance";
+    doc.head.appendChild(style);
+  }
+  style.textContent = styles;
+}
+
 interface Props {
+  viewingStyles: string;
   html: string;
   onChange: (html: string) => void;
   editorRef: MutableRefObject<HugeEditor | null>;
@@ -11,12 +24,16 @@ interface Props {
   onLoadError: () => void;
 }
 export default function RichEditor({
+  viewingStyles,
   html,
   onChange,
   editorRef,
   onReady,
   onLoadError,
 }: Props) {
+  useEffect(() => {
+    if (editorRef.current) applyViewingStyles(editorRef.current, viewingStyles);
+  }, [viewingStyles, editorRef]);
   const base = `${import.meta.env.BASE_URL}vendor/hugerte`;
   return (
     <Editor
@@ -25,6 +42,7 @@ export default function RichEditor({
       onScriptsLoadError={onLoadError}
       onInit={(_, editor) => {
         editorRef.current = editor;
+        applyViewingStyles(editor, viewingStyles);
         onReady();
       }}
       onEditorChange={onChange}
