@@ -1,15 +1,10 @@
 {
   "version": 1,
   "title": "Template Studio",
-  "stack": [
-    "React",
-    "TypeScript",
-    "Vite",
-    "HugeRTE"
-  ],
+  "stack": ["React", "TypeScript", "Vite", "HugeRTE"],
   "descriptions": {
-    "en": "A document workspace with rich-text editing, template variables, desktop/mobile previews, browser-local drafts, and sanitized HTML export.",
-    "de": "Ein Dokumenten-Workspace mit Rich-Text-Editor, Vorlagenvariablen, Desktop-/Mobilvorschau, lokalen Entwürfen und bereinigtem HTML-Export.",
-    "id": "Ruang kerja dokumen dengan editor rich text, variabel templat, pratinjau desktop/seluler, draf lokal browser, dan ekspor HTML tersanitasi."
+    "en": "A document workspace with rich-text editing, template variables, desktop/mobile previews, browser-local drafts, and sanitized HTML export. System, light/dark themes, and increased contrast.",
+    "de": "Ein Dokumenten-Workspace mit Rich-Text-Editor, Vorlagenvariablen, Desktop-/Mobilvorschau, lokalen Entwürfen und bereinigtem HTML-Export. Mit Systemmodus, hellem/dunklem Design und erhöhtem Kontrast.",
+    "id": "Ruang kerja dokumen dengan editor rich text, variabel templat, pratinjau desktop/seluler, draf lokal browser, dan ekspor HTML tersanitasi. Dengan tema sistem, terang/gelap, dan kontras lebih tinggi."
   }
 }

@@ -24,10 +24,15 @@ import {
   Trash2,
   X,
 } from "lucide-react";
+import AppearanceControls from "./components/AppearanceControls";
 import RichEditor from "./components/RichEditor";
 import useStudio from "./hooks/useStudio";
 import { templates } from "./data/templates";
-import { exportDocument, renderDocument } from "./utils/document";
+import {
+  exportDocument,
+  renderDocument,
+  documentAppearanceStyles,
+} from "./utils/document";
 
 const templateIcons = {
   brief: FileText,
@@ -44,6 +49,28 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [ready, setReady] = useState(false);
+  const [viewingStyles, setViewingStyles] = useState(() =>
+    documentAppearanceStyles(
+      document.documentElement.dataset.theme || "light",
+      document.documentElement.dataset.contrast || "standard",
+    ),
+  );
+  useEffect(() => {
+    const update = () =>
+      setViewingStyles(
+        documentAppearanceStyles(
+          document.documentElement.dataset.theme || "light",
+          document.documentElement.dataset.contrast || "standard",
+        ),
+      );
+    const observer = new MutationObserver(update);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme", "data-contrast"],
+    });
+    update();
+    return () => observer.disconnect();
+  }, []);
   const [editorError, setEditorError] = useState(false);
   const [notice, setNotice] = useState("");
   const [addingVariable, setAddingVariable] = useState(false);
@@ -300,6 +327,7 @@ export default function App() {
             <strong>Template editor</strong>
           </div>
           <div className="topbar-right">
+            <AppearanceControls />
             <span className="demo-badge">
               <span /> INTERACTIVE DEMO
             </span>
@@ -434,6 +462,7 @@ export default function App() {
                       </div>
                     )}
                     <RichEditor
+                      viewingStyles={viewingStyles}
                       key={selected}
                       html={draft.html}
                       onChange={(html) => updateDraft({ html })}
@@ -472,7 +501,11 @@ export default function App() {
                         className={`document-preview ${mobilePreview ? "mobile-preview" : ""}`}
                         title="Live document preview"
                         sandbox=""
-                        srcDoc={exportDocument(draft.title, rendered)}
+                        srcDoc={exportDocument(
+                          draft.title,
+                          rendered,
+                          viewingStyles,
+                        )}
                       />
                     </>
                   )}
