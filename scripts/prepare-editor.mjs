@@ -16,8 +16,6 @@ const packages = [
   ["react", "LICENSE"],
   ["react-dom", "LICENSE"],
   ["scheduler", "LICENSE"],
-  ["loose-envify", "LICENSE"],
-  ["js-tokens", "LICENSE"],
   ["dompurify", "LICENSE"],
   ["dompurify", "LICENSE-MPL"],
   ["lucide-react", "LICENSE"],
