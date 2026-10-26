@@ -7,14 +7,44 @@ updates:
       day: monday
       time: "06:00"
       timezone: Europe/Berlin
-    open-pull-requests-limit: 3
+    open-pull-requests-limit: 5
+    # Keep incompatible majors out until their peer dependencies support them.
+    ignore:
+      - dependency-name: eslint
+        versions: ["10.x"] # eslint-plugin-jsx-a11y supports ESLint through 9.
+      - dependency-name: "@eslint/js"
+        versions: ["10.x"]
+      - dependency-name: typescript
+        versions: ["7.x"] # typescript-eslint currently requires TypeScript <6.1.
     groups:
+      # Runtime, types, and test renderer must move together across React majors.
       framework:
         patterns:
           - react
           - react-dom
+          - "@types/react"
+          - "@types/react-dom"
+          - "@testing-library/react"
+          - "@testing-library/dom"
+      linting:
+        patterns:
+          - eslint
+          - "@eslint/*"
+          - "eslint-plugin-*"
+          - typescript
+          - typescript-eslint
+        update-types: [minor, patch]
+      build-and-test:
+        patterns:
+          - vite
+          - "@vitejs/*"
+          - vitest
+          - "@vitest/*"
+        update-types: [minor, patch]
+      # Other major upgrades get individual PRs instead of a mixed tools batch.
       development-tools:
         dependency-type: development
+        update-types: [minor, patch]
   - package-ecosystem: github-actions
     directory: /
     schedule:
