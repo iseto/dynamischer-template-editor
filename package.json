@@ -22,7 +22,7 @@
     "@fontsource-variable/manrope": "^5.3.0",
     "@hugerte/hugerte-react": "^2.0.2",
     "dompurify": "^3.4.17",
-    "hugerte": "^1.0.14",
+    "hugerte": "^1.0.15",
     "lucide-react": "^1.57.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1"
